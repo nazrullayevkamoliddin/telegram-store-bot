@@ -27,6 +27,10 @@ const botStart = () => {
                 }
             )
         }
+
+        if(msg.web_app_data?.data){
+            console.log(msg.web_app_data?.data)
+        }
     })
 }
 
