@@ -10,7 +10,21 @@ const botStart = () => {
 
         if (text === '/start') {
             await bot.sendMessage(
-                chatId, 'CyberXoja platformasiga xush kelibsiz. '
+                chatId, 'CyberXoja platformasiga xush kelibsiz. ',
+                {
+                    reply_markup:{
+                        keyboard:[
+                            [
+                                {
+                                    text:"Kurslarni ko'rish",
+                                    web_app:{
+                                        url:'https://cyberxojastore.vercel.app/'
+                                    }
+                                }
+                            ]
+                        ]  
+                    }
+                }
             )
         }
     })
