@@ -1,13 +1,21 @@
 const TelegramBot = require('node-telegram-bot-api')
 const token = '6302016552:AAHjCBScZoExOQ-53r7G6MggtXCi7EueGAc'
 
+const express = require('express');
+const cors = require('cors')
+
+const app = express();
+
+app.use(express.json())
+app.use(cors());
+
 const bot = new TelegramBot(token, { polling: true });
 
 const botStart = () => {
-    
+
     bot.setMyCommands([
-        {command:'/start', description:"Kurslar haqida ma'lumot"},
-        {command:"/courses", description:"Barcha kurslar"}
+        { command: '/start', description: "Kurslar haqida ma'lumot" },
+        { command: "/courses", description: "Barcha kurslar" }
     ])
 
     bot.on("message", async msg => {
@@ -34,6 +42,26 @@ const botStart = () => {
             )
         }
 
+        if (text === '/courses') {
+            await bot.sendMessage(
+                chatId,
+                'CyberXoja platformasida eng mukammal kurslarni sotib olishingiz mumkin',
+                {
+                    reply_markup: {
+                        inline_keyboard: [
+                            [
+                                {
+                                    text: "Kurslarni ko'rish",
+                                    web_app: {
+                                        url: "https://cyberxojastore.vercel.app/"
+                                    }
+                                }
+                            ]
+                        ]   
+                    }
+                }
+            )
+        }
 
 
         if (msg.web_app_data?.data) {
@@ -54,8 +82,9 @@ const botStart = () => {
                     chatId,
                     `Umumiy narx - ${data
                         .reduce((a, c) => a + c.price * c.quantity, 0)
-                        .toLocaleString('en-US', { style: 'currency', currency: 'USD' 
-                    })}`
+                        .toLocaleString('en-US', {
+                            style: 'currency', currency: 'USD'
+                        })}`
                 );
             } catch (error) {
                 console.log(error)
@@ -65,3 +94,11 @@ const botStart = () => {
 }
 
 botStart();
+
+app.post('/web-data',async (req,res) => {
+    
+})
+
+app.listen(process.env.PORT || 8080, () => {
+    console.log('Server Started')
+})
