@@ -57,7 +57,7 @@ const botStart = () => {
                                     }
                                 }
                             ]
-                        ]   
+                        ]
                     }
                 }
             )
@@ -95,8 +95,28 @@ const botStart = () => {
 
 botStart();
 
-app.post('/web-data',async (req,res) => {
-    
+app.post('/web-data', async (req, res) => {
+    const { queryId, products } = req.body;
+
+    try {
+        await bot.answerWebAppQuery(queryId, {
+            type: 'article',
+            id: queryId,
+            title: 'Muvaffaqiyatli xarid qildingiz',
+            input_message_content: {
+                message_text: `Xaridingiz uchun rahmat, siz 
+                ${products
+                    .reduce((a, c) => a + c.price * c.quantity, 0)
+                    .toLocaleString('en-US', { style: 'currency', currency: 'USD' })} 
+                    qiymatga ega mahsulot sotib oldingiz, 
+                    ${products.map(c => `${c.title} ${c.quantity}x`)
+                    .join(', ')
+                }`
+            }
+        })
+    } catch (error) {
+
+    }
 })
 
 app.listen(process.env.PORT || 8080, () => {
